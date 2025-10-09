@@ -1,0 +1,8 @@
+# Data fetching
+ccxt==3.0.80  
+
+# Data processing
+pandas==2.2.0
+
+# Plotting & visualization
+matplotlib==3.8.0
