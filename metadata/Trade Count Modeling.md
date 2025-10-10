@@ -19,6 +19,8 @@ Produce visualizations and statistics to understand the count process.
 - **Autocorrelation Function (ACF):**  
     Compute ACF of trade counts to test for temporal dependence.  
     → Independence ⇒ ACF near zero.
+
+    ACF in this context gives the dependence of count of trades in future and current count of trades. 
 - **Distribution Check:**  
     Compare histogram of counts with Poisson(λ = mean count).  
     Optionally, use a goodness-of-fit test (e.g., chi-square).
