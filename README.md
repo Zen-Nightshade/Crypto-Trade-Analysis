@@ -1,6 +1,7 @@
 # Crypto Trade Analysis Project Repository Layout
 
 ## Root Structure
+```
 ├── README.md                   # Overview, project description, instructions
 ├── environment.yml / requirements.txt  # Conda or pip dependencies
 ├── data/                       # Raw and processed data
@@ -32,3 +33,4 @@
 └── reports/                    # Short reports or slide decks
     ├── counts_report.pdf
     └── waiting_report.pdf
+```

@@ -10,3 +10,4 @@ src/**/.ipynb
 env/
 venv/
 myenv/
+crypto_venv/
