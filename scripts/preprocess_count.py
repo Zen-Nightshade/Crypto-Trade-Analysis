@@ -13,8 +13,6 @@ columns = ["timestamp", "symbol", "side", "price", "amount"]
 input_dir = "../data/raw/one_week/"
 output_dir = "../data/processed/trades_2025-10-01_to_2025-10-07_10s.csv"
 
-[f for f in os.listdir(input_dir) if f.endswith(".csv")]
-
 file_paths = [os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith(".csv")]
 
 trades = pd.DataFrame()

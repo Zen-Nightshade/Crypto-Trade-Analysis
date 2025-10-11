@@ -25,7 +25,6 @@ def plotArray(counts, title, xlabel, ylabel, filename):
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.title(title)
-        plt.grid(True)
         plt.savefig(filename, format='jpg')
         # plt.show()
 
