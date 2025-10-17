@@ -2,14 +2,14 @@ import pandas as pd
 import numpy as np
 import os
 
-group = "10s" # Examples:- "10S", "1min"/"1T", "1H", "1D", "1W"
+group = "10s" # Examples:- "10s", "1min"/"1T", "1H", "1D", "1W"
 def vwap(x):
     amt_sum = x["amount"].sum()
     if amt_sum > 0:
         return (x["price"] * x["amount"]).sum() / amt_sum
     return x["price"].mean()
 
-columns = ["timestamp", "symbol", "side", "price", "amount"]
+columns = ["timestamp", "symbol", "side", "price", "amount", "cost"]
 input_dir = "../data/raw/one_week/"
 output_dir = "../data/processed/trades_2025-10-01_to_2025-10-07_10s.csv"
 
@@ -37,6 +37,7 @@ for file_path in file_paths:
             "sold": x["sold"].sum(),
             "amount": x["amount"].sum(),
             "price": vwap(x),
+            "cost": x["cost"].sum(),
             "trade_count": len(x)
 
         }))
