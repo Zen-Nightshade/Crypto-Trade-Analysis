@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 def prepareDF(filepath):
         df = pd.read_csv(filepath)
@@ -36,11 +37,12 @@ def autoCorrelationFunction(counts, filename):
 
 
 if __name__ == "__main__":
+        os.makedirs("../figures", exist_ok=True)
         filepath = "../data/raw/one_week/trades_2025-10-01_00.csv"
         counts = getTradesPerMinute(filepath)
         sizes = getTradeCostsPerMinute(filepath)
 
-        autoCorrelationFunction(counts, "../plots/TradeCountACF.jpg")
-        autoCorrelationFunction(sizes, "../plots/TradeCostACF.jpg")
-        plotArray(counts, "Trades per Minute", "Minutes", "Number of Trades", "../plots/TradesPerMinute.jpg")
-        plotArray(sizes, "Trade Costs per Minute", "Minutes", "Cost of Trades", "../plots/TradeCostsPerMinute.jpg")
+        autoCorrelationFunction(counts, "../figures/TradeCountACF.jpg")
+        autoCorrelationFunction(sizes, "../figures/TradeCostACF.jpg")
+        plotArray(counts, "Trades per Minute", "Minutes", "Number of Trades", "../figures/Trades_per_minute.jpg")
+        plotArray(sizes, "Trade Costs per Minute", "Minutes", "Cost of Trades", "../figures/Trade_costs_per_minute.jpg")
