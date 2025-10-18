@@ -1,7 +1,6 @@
 import ccxt
 import pandas as pd
 import time
-from datetime import datetime
 import os
 
 binance = ccxt.binance()
@@ -15,7 +14,7 @@ os.makedirs(output_dir, exist_ok=True)
 
 all_trades = []
 since = start_time
-chunk_size = 1000   # trades per API call
+chunk_size = 1000
 save_every = 10     # batches before saving
 
 batch_count = 0
