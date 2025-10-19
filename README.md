@@ -2,14 +2,14 @@
 
 ## Overview
 This project performs a **Bayesian analysis of cryptocurrency trade activity** (BTC/USDT) at high frequency, focusing on both **trade rate** (number of trades per minute) and **trade volume** (total cost of trades per minute).  
-We aim to model and understand the dynamics of trades, capture uncertainty, and assess model performance using **Posterior Predictive Intervals (PPI)**.
+We aim to model and understand the dynamics of trades, capture uncertainty, and assess model performance using **Posterior Probability Intervals (PPI)**.
 
 ---
 
-## Project Structure
+## Repository Structure
 
 ```
-├── data/                       # Raw and processed data
+├── data/                        # Raw and processed data
 │   ├── raw/
 │   │   └── one_week             # Contains trades from 2025-10-01 00:00:00 to 2025-10-08 00:00:00
 │   └── processed/
