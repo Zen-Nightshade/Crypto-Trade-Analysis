@@ -1,36 +1,117 @@
-# Crypto Trade Analysis Project Repository Layout
+# Crypto Trade Analysis
 
-## Root Structure
+## Overview
+This project performs a **Bayesian analysis of cryptocurrency trade activity** (BTC/USDT) at high frequency, focusing on both **trade rate** (number of trades per minute) and **trade volume** (total cost of trades per minute).  
+We aim to model and understand the dynamics of trades, capture uncertainty, and assess model performance using **Posterior Predictive Intervals (PPI)**.
+
+---
+
+## Project Structure
+
 ```
-├── README.md                   # Overview, project description, instructions
-├── environment.yml / requirements.txt  # Conda or pip dependencies
 ├── data/                       # Raw and processed data
-│   ├── raw/                    # Original trade data CSVs or JSON
-│   └── processed/              # Aggregated/minute-level counts, inter-trade times
-├── notebooks/                  # Jupyter / Colab notebooks
-│   ├── phase1_counts_EDA.ipynb          # Phase 1: trade count exploration
-│   ├── phase1_waiting_EDA.ipynb         # Phase 1: waiting time exploration
-│   ├── phase2_counts_Bayesian.ipynb     # Phase 2: analytic and MCMC Poisson models
-│   ├── phase2_waiting_Bayesian.ipynb    # Phase 2: analytic and MCMC Exponential models
-│   ├── phase3_counts_comparisons.ipynb  # Phase 3: conjugate vs non-conjugate counts
-│   ├── phase3_waiting_comparisons.ipynb # Phase 3: conjugate vs non-conjugate waiting times
-│   ├── phase4_counts_advanced.ipynb     # Phase 4: NHPP, hierarchical, mixtures counts
-│   ├── phase4_waiting_advanced.ipynb    # Phase 4: time-varying, mixture, hierarchical waiting times
-│   ├── phase5_counts_prediction.ipynb   # Phase 5: forecasts, PPC, evaluation for counts
-│   └── phase5_waiting_prediction.ipynb  # Phase 5: forecasts, PPC, evaluation for waiting times
-├── scripts/                    # Python scripts for data processing / model utilities
+│   ├── raw/
+│   │   └── one_week             # Contains trades from 2025-10-01 00:00:00 to 2025-10-08 00:00:00
+│   └── processed/
+├── figures/                     # All plots and figures
+├── metadata/
+├── notebooks/                   # Jupyter / Colab notebooks
+│   ├── Exploratory_Data_Analysis.ipynb
+│   ├── Gamma_Poisson_Model.ipynb
+│   ├── Joint_Normal_Volume_model.ipynb
+│   └── Log_Normal_Poisson_Model.ipynb
+├── reports/                     # Contain project report
+├── scripts/                     # Python scripts for data processing
 │   ├── fetch_data.py            # Download trades from Binance/CCXT
-│   ├── preprocess_counts.py     # Aggregate raw trades into counts per interval
-│   ├── preprocess_waiting.py    # Compute inter-trade times
-│   ├── bayesian_utils.py        # Functions for posterior computation, PPC
-│   └── plotting_utils.py        # Standard plotting functions for EDA and PPC
-├── figures/                    # All plots and figures
-│   ├── counts/                  # Trade counts plots (time series, PPC, diagnostics)
-│   └── waiting/                 # Waiting time plots (histogram, QQ, PPC)
-├── models/                     # Saved model objects or Stan/PyMC model files
-│   ├── counts/                  # Stan/PyMC models for counts
-│   └── waiting/                 # Stan/PyMC models for waiting times
-└── reports/                    # Short reports or slide decks
-    ├── counts_report.pdf
-    └── waiting_report.pdf
+│   ├── data_splitter.py
+│   ├── preprocess.py            # Aggregate raw trades into intervals of 1min and 10s
+│   ├── random_utils.py          # Classes to generate random variables from different distributions
+│   └── plot_trades.py           # Standard plotting functions used in EDA
+├── .gitignore
+├── README.md                    # Overview, project description, instructions
+└── requirements.txt
+
+````
+
+---
+
+## Data
+* **Raw Data:** Trades are fetched from Binance using the `ccxt` API.
+* **Preprocessing:** Trades are aggregated into **1-minute and 10-second intervals**, with the following computed fields:
+  * Timestamp
+  * Bought quantity
+  * Sold quantity
+  * Total traded quantity
+  * Price (computed via **Volume-Weighted Average Price**, VWAP)
+  * Trade cost
+  * Number of trades
+  * Symbol
+
+This preprocessing helps **reduce noise** and **stabilize variability**, making the data more suitable for Bayesian modeling.
+
+---
+
+## Models
+
+### Trade Rate Models
+- **Gamma–Poisson Model:** Conjugate Bayesian model for the number of trades per minute.  
+- **Lognormal–Poisson Model:** Non-conjugate Bayesian model, more flexible for heavy-tailed trade rates.  
+  > **Note:** This model uses Monte Carlo simulations for posterior inference and can benefit from a GPU for faster computation.
+
+**Lag-based Updating:**  
+The posterior at time *t* is updated using data from the previous *lag* minutes to capture short-term temporal dependencies. Smaller lag values improve model responsiveness to rapid market changes.  
+
+**Posterior Predictive Checks:**  
+We validate the models by simulating trade counts from the posterior and comparing them with observed data.  
+
+### Trade Volume Models
+- **Joint Normal Model:** We model the **logarithm of trade volume** to stabilize variance and reduce skewness.  
+- Smaller lag values result in more responsive predictions, allowing the model to adapt to recent market changes.  
+- Posterior Predictive Intervals (PPI) captured a large proportion of observed trade volumes, indicating strong model fit.
+
+---
+
+## Usage
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Zen-Nightshade/Crypto-Trade-Analysis.git
+cd Crypto-Trade-Analysis
+````
+
+2. Install dependencies:
+
+```bash
+pip install -r requirements.txt
 ```
+
+3. Fetch and preprocess data:
+
+```bash
+python scripts/fetch_data.py
+python scripts/preprocess.py
+```
+
+4. Run notebooks for exploratory analysis and modeling:
+
+* `notebooks/Exploratory_Data_Analysis.ipynb`
+* `notebooks/Gamma_Poisson_Model.ipynb`
+* `notebooks/Joint_Normal_Volume_model.ipynb`
+* `notebooks/Log_Normal_Poisson_Model.ipynb`
+
+5. Generated figures and plots are stored in the `figures/` directory.
+
+---
+
+## Results
+
+* Both **trade rate models** struggle to capture extreme fluctuations at very high frequency, with a large proportion of data points lying outside the PPI.
+* Smaller lag values improve model responsiveness, especially for sudden market movements.
+* The **Joint Normal model** for trade volume shows a better fit and PPI coverage compared to trade rate models, capturing the majority of variability in the log-transformed trade volume effectively.
+
+---
+
+# Who We Are
+- [Zen_Nightshade](https://github.com/Zen-Nightshade)
+- [Celingsz](https://github.com/Ceilingsz)
