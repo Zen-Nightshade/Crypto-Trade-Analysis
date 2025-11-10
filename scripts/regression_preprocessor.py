@@ -52,10 +52,12 @@ if __name__ == "__main__":
 
         df_agg["log_return"] = np.log(df_agg["close_price"] / df_agg["close_price"].shift(1))
         df_agg["lag1_return"] = df_agg["log_return"].shift(1)
+        df_agg["prev_close_price"] = df_agg["close_price"].shift(1)
         df_agg["volatility"] = df_agg["log_return"].rolling(window=10).std()
 
         # Due to this Volayility calculation the first 9 mins will have NULL values and as we lots of data i am removing those
         df_agg = df_agg.dropna()
+        df_agg.drop("close_price", axis =1)
         if prev_file is not None:
             _, _, date, hour = file.split("_")
             file_hour = pd.to_datetime(f"{date} {hour[:2]}:00:00")
