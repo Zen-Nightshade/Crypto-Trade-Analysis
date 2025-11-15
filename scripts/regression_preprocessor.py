@@ -40,7 +40,8 @@ if __name__ == "__main__":
                         x.loc[x["side"] == "sell", "amount"].sum()) /
                     (x.loc[x["side"] == "buy", "amount"].sum() + 
                         x.loc[x["side"] == "sell", "amount"].sum() + 1e-8)
-                ),
+                )
+                # "trade_count": len(x)
 
             }))
             .reset_index()
@@ -55,7 +56,7 @@ if __name__ == "__main__":
         df_agg["prev_close_price"] = df_agg["close_price"].shift(1)
         df_agg["volatility"] = df_agg["log_return"].rolling(window=10).std()
 
-        # Due to this Volayility calculation the first 9 mins will have NULL values and as we lots of data i am removing those
+        # Due to this Volatility calculation the first 9 mins will have NULL values and as we lots of data i am removing those
         df_agg = df_agg.dropna()
         df_agg.drop("close_price", axis =1)
         if prev_file is not None:
